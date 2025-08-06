@@ -4,50 +4,45 @@ import numpy as np
 import json
 import os
 
-# MediaPipe çizim ve poz çözümlerini başlat
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-# Açı hesaplama fonksiyonu (2D düzlemde)
-# Bu fonksiyon MediaPipe'ın verdiği x,y koordinatlarını kullanır.
-# 3D açılar için daha karmaşık bir hesaplama gerekir.
-def calculateAngle(a, b, c):
-    a, b, c = np.array(a), np.array(b), np.array(c) # Noktaları NumPy dizilerine dönüştür
 
-    # Vektörleri oluştur
+def calculateAngle(a, b, c):
+    a, b, c = np.array(a), np.array(b), np.array(c) 
+
+    
     vec1 = b - a
     vec2 = b - c
 
-    # Nokta çarpımı ve büyüklükleri kullanarak açıyı hesapla
-    # Güvenlik için sıfıra bölme hatasını önle
+    
     dot_product = np.dot(vec1, vec2)
     magnitude1 = np.linalg.norm(vec1)
     magnitude2 = np.linalg.norm(vec2)
 
     if magnitude1 == 0 or magnitude2 == 0:
-        return 0.0 # Sıfır büyüklükte vektörler için açı tanımsız, 0 döndür
+        return 0.0 
 
     radians = np.arccos(dot_product / (magnitude1 * magnitude2))
-    angle = np.degrees(radians) # Radyanı dereceye çevir
+    angle = np.degrees(radians) 
 
-    # Açının 0-180 derece arasında olmasını sağla
+    
     return angle
 
-# Videoların bulunduğu ana dizin
-# ÖNEMLİ: Kendi video dizininizin yolunu buraya yazın
+
 video_directory = r"C:\Users\MS\Desktop\videos"
 
-# JSON dosyalarının kaydedileceği çıktı dizini
-# Bu dizin yoksa otomatik olarak oluşturulacaktır.
-output_directory = r"C:\Users\MS\dance-tracker\src\reference_data"
-os.makedirs(output_directory, exist_ok=True) # Dizin yoksa oluştur
 
-# Desteklenen video uzantıları
+output_directory = r"C:\Users\MS\dance-tracker\src\reference_data"
+os.makedirs(output_directory, exist_ok=True) 
+
+
 video_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.flv')
 
-# Video dizinindeki tüm dosyaları listele
+
 for filename in os.listdir(video_directory):
-    # Dosyanın bir video olup olmadığını kontrol et
+    
     if filename.lower().endswith(video_extensions):
         video_path = os.path.join(video_directory, filename)
         print(f"\n--- Video işleniyor: {filename} ---")
@@ -55,33 +50,30 @@ for filename in os.listdir(video_directory):
         cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
             print(f"Hata: Video açılamadı! Yol: {video_path}")
-            continue # Sonraki videoya geç
+            continue 
 
-        frame_data = [] # Her video için yeni bir liste başlat
+        frame_data = []
 
-        # MediaPipe Pose modelini başlat
+        
         with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
             frame_count = 0
             while cap.isOpened():
                 ret, frame = cap.read()
                 if not ret:
-                    break # Kare okunamadıysa (video bittiyse) döngüden çık
+                    break 
 
                 frame_count += 1
-                # Görüntüyü BGR'den RGB'ye dönüştür (MediaPipe RGB bekler)
+                
                 image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                image.flags.writeable = False # Görüntüyü salt okunur yap (performans için)
-                results = pose.process(image) # Poz algılama işlemini yap
-                image.flags.writeable = True # Görüntüyü tekrar yazılabilir yap
+                image.flags.writeable = False 
+                results = pose.process(image) 
+                image.flags.writeable = True 
 
                 try:
-                    # Algılanan poz landmark'larını al
+                    
                     landmarks = results.pose_landmarks.landmark
 
-                    # --- Belirli eklem noktalarının koordinatlarını çıkar ---
-                    # MediaPipe'ın landmark indekslerini kullanarak koordinatları alıyoruz.
-                    # x, y, z değerleri 0 ile 1 arasında normalize edilmiş değerlerdir.
-                    # visibility değeri, landmark'ın ne kadar güvenilir bir şekilde algılandığını gösterir.
+                   
 
                     # Sol taraf koordinatları
                     left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
@@ -139,8 +131,7 @@ for filename in os.listdir(video_directory):
                         "right_neck_angle": calculateAngle(right_shoulder, right_nose, right_ear)
                     }
 
-                    # --- Tüm Landmark Koordinatlarını Kaydet ---
-                    # Her landmark için x, y, z ve visibility değerlerini içeren bir liste oluştur
+                    #
                     landmark_list = []
                     for lm_id, lm in enumerate(landmarks):
                         landmark_list.append({
@@ -164,15 +155,15 @@ for filename in os.listdir(video_directory):
                     print(f"Kare {frame_count} işlenirken hata oluştu veya poz algılanamadı: {e}")
                     continue
 
-        cap.release() # Mevcut videoyu serbest bırak
+        cap.release() 
 
-        # JSON dosyasının adı (video adından türetilir)
+        
         json_filename = os.path.splitext(filename)[0] + "_pose_data.json"
         output_path = os.path.join(output_directory, json_filename)
 
-        # Toplanan verileri JSON dosyasına yaz
+       
         with open(output_path, 'w') as f:
-            json.dump(frame_data, f, indent=4) # Okunabilir olması için indent kullan
+            json.dump(frame_data, f, indent=4) 
 
         print(f"Poz verileri başarıyla kaydedildi: {output_path}")
 
