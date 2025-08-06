@@ -54,7 +54,7 @@ hiphop_dance_data = [
         "common_mistakes": ["Adım sayısının karıştırılması", "Hızdan dolayı kontrol kaybı"],
         "evaluation_criteria": ["Timing", "Smooth Transition", "Floor Control"]
     },
-    # ... Diğer dans hareketleri aynı şekilde devam eder
+   
 ]
 
 # RAG sistemi için metin hazırlığı
@@ -77,7 +77,7 @@ texts = text_splitter.create_documents(rag_source_texts)
 vectorstore = Chroma.from_documents(documents=texts, embedding=embeddings_model)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
-# Langchain zincirleri ve promptlar
+
 chat_prompt_template = PromptTemplate(
     input_variables=["user_message"],
     template="""
