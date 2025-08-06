@@ -1,13 +1,13 @@
 /* App.css */
 
 html, body {
-  height: 100%; /* HTML ve body'nin yüksekliğini tam ekran yap */
+  height: 100%; 
   margin: 0;
   font-family: 'Orbitron', sans-serif;
   background: linear-gradient(135deg, #000428, #004e92);
-  overflow-y: auto; /* Dikey kaydırmayı etkinleştir */
+  overflow-y: auto; 
   color: #fff;
-  cursor: default; /* Fare imlecini varsayılan yap */
+  cursor: default; 
 }
 
 .app-container {
@@ -16,8 +16,8 @@ html, body {
   align-items: center;
   padding: 20px;
   position: relative;
-  min-height: 100vh; /* İçerik az olsa bile en az ekran yüksekliği kadar olmasını sağlar */
-  box-sizing: border-box; /* Padding'in toplam yüksekliği etkilememesi için */
+  min-height: 100vh; 
+  box-sizing: border-box; 
 }
 
 .interactive-bg {
@@ -30,7 +30,7 @@ html, body {
   100% { background-position: 100% 50%; }
 }
 
-/* MouseTrail için fadeOutTrail animasyonunu koruyoruz, ancak MouseTrail bileşeni kaldırılacak */
+
 @keyframes fadeOutTrail {
   from { opacity: 1; transform: scale(1); }
   to { opacity: 0; transform: scale(2); }
@@ -46,18 +46,18 @@ html, body {
   border-bottom: 1px solid #444;
   align-items: center;
   gap: 10px;
-  box-sizing: border-box; /* Padding'in genişliği etkilememesi için */
+  box-sizing: border-box;
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
   user-select: none;
-  color: #00ffff; /* Logo rengini belirginleştir */
+  color: #00ffff; 
   text-shadow: 0 0 8px #00ffff;
 }
 
-/* Arama kutusu ve büyüteç ikonu */
+
 
 .input-wrapper {
   position: relative;
@@ -65,12 +65,12 @@ html, body {
 }
 
 .dance-input {
-  padding: 8px 36px 8px 12px; /* Sağda büyüteç için boşluk */
+  padding: 8px 36px 8px 12px; 
   border-radius: 12px;
   border: 2px solid #00ffff;
   outline: none;
   width: 250px;
-  background: #0a1a2a; /* koyu mavi ton */
+  background: #0a1a2a; 
   color: #00ffff;
   font-weight: 600;
   font-size: 14px;
@@ -109,7 +109,7 @@ html, body {
   gap: 10px;
 }
 
-/* Genel buton stili */
+
 button {
   font-family: 'Orbitron', sans-serif;
   font-weight: 600;
@@ -139,9 +139,9 @@ button {
 .music-controls input[type="range"] {
   vertical-align: middle;
   cursor: pointer;
-  -webkit-appearance: none; /* Varsayılan stili kaldır */
-  width: 120px; /* Genişlik */
-  height: 8px; /* Kalınlık */
+  -webkit-appearance: none; 
+  width: 120px; 
+  height: 8px; 
   background: #004d4d; /* Arka plan rengi */
   border-radius: 5px;
   outline: none;
@@ -151,10 +151,10 @@ button {
 .music-controls input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px; /* Başparmak boyutu */
-  height: 20px; /* Başparmak boyutu */
+  width: 20px; 
+  height: 20px; 
   border-radius: 50%;
-  background: #00ffff; /* Başparmak rengi */
+  background: #00ffff; 
   cursor: grab;
   box-shadow: 0 0 8px #00ffff;
 }
@@ -178,31 +178,31 @@ button {
   margin-top: 150px;
   animation: zoomIn 1s forwards;
   user-select: none;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.6); /* Başlangıç ekranına gölge */
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.6); 
 }
 
 .start-screen .title {
   font-size: 28px;
   margin-bottom: 20px;
   font-weight: 700;
-  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; /* Daha belirgin gölge */
+  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; 
 }
 
 .start-button {
-  padding: 15px 40px; /* Daha büyük buton */
+  padding: 15px 40px; 
   border-radius: 30px;
-  background: linear-gradient(45deg, #00b894, #00e676); /* Gradyan arka plan */
+  background: linear-gradient(45deg, #00b894, #00e676); 
   color: white;
   font-size: 20px; /* Daha büyük font */
   font-weight: 700;
-  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.6), inset 0 -4px 8px rgba(0, 150, 120, 0.8); /* Daha belirgin gölge */
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.6), inset 0 -4px 8px rgba(0, 150, 120, 0.8); 
   letter-spacing: 1px;
 }
 
 .start-button:hover {
   background: linear-gradient(45deg, #019875, #00c853);
   box-shadow: 0 10px 25px rgba(0, 184, 148, 0.8), inset 0 -5px 10px rgba(0, 150, 120, 0.9);
-  transform: translateY(-3px); /* Hafif yukarı kalkma efekti */
+  transform: translateY(-3px); 
 }
 
 .start-button:active {
@@ -219,11 +219,11 @@ button {
   position: relative;
   margin-top: 20px;
   text-align: center;
-  display: flex; /* İçindeki videoları yan yana hizalamak için */
+  display: flex; 
   justify-content: center;
-  align-items: flex-start; /* Videoların üstten hizalanması için */
+  align-items: flex-start;
   gap: 30px;
-  flex-wrap: wrap; /* Küçük ekranlarda alt alta geçiş için */
+  flex-wrap: wrap; 
 }
 
 .video-container-wrapper {
@@ -233,37 +233,37 @@ button {
   gap: 10px;
 }
 
-/* Video boyutlarını küçülttük */
+
 .video-active {
-  width: 420px; /* Yeni genişlik */
-  height: 465px; /* Yeni yükseklik */
+  width: 420px; 
+  height: 465px; 
   border-radius: 20px;
   border: 4px solid #00bcd4;
   box-shadow: 0 0 25px #00bcd4;
   user-select: none;
 }
 
-/* Doğruluk Çubuğu */
+
 .accuracy-bar-container {
-  width: 30px; /* Çubuğun genişliği */
-  height: 465px; /* Video yüksekliği ile aynı */
+  width: 30px; 
+  height: 465px; 
   background: rgba(0, 255, 255, 0.1);
   border: 2px solid #00ffff;
   border-radius: 15px;
   position: relative;
   overflow: hidden;
-  margin-left: 20px; /* Video ile arasında boşluk */
+  margin-left: 20px; 
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .accuracy-bar-fill {
   width: 100%;
-  background: linear-gradient(to top, #ff0000, #ffff00, #00ff00); /* Kırmızıdan yeşile gradyan */
+  background: linear-gradient(to top, #ff0000, #ffff00, #00ff00); 
   position: absolute;
   bottom: 0;
   left: 0;
-  transition: height 0.5s ease-out; /* Doluluk değişimine animasyon */
-  border-radius: 0 0 13px 13px; /* Alt köşeleri yuvarlak tut */
+  transition: height 0.5s ease-out; 
+  border-radius: 0 0 13px 13px; 
 }
 
 
@@ -286,11 +286,11 @@ button {
   z-index: 10001;
 }
 
-/* Yeni Müzik Değiştirme Paneli */
+
 .music-changer-panel {
   position: fixed;
   left: 20px;
-  bottom: 90px; /* Chatbot butonunun biraz üstünde */
+  bottom: 90px; 
   width: 120px;
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
@@ -304,7 +304,7 @@ button {
 }
 
 .music-changer-panel button {
-  background: linear-gradient(45deg, #007bff, #00c0ff); /* Mavi gradyan */
+  background: linear-gradient(45deg, #007bff, #00c0ff); 
   color: white;
   padding: 8px 10px;
   font-size: 14px;
@@ -355,7 +355,7 @@ button {
   border-radius: 3px;
 }
 
-/* Chat mesajları için genel stil */
+
 .chat-messages > div {
   margin-bottom: 6px;
 }
@@ -369,13 +369,13 @@ button {
   font-size: 14px;
 }
 
-/* Bot mesajları */
+
 .chat-messages > div[style*="text-align: left"] > span {
   background-color: #004d4d;
   color: #fff;
 }
 
-/* Kullanıcı mesajları */
+
 .chat-messages > div[style*="text-align: right"] > span {
   background-color: #00cccc;
   color: #000;
@@ -407,7 +407,7 @@ button {
 
 .chat-input button {
   padding: 10px 16px;
-  background: linear-gradient(45deg, #6c5ce7, #a29bfe); /* Gradyan */
+  background: linear-gradient(45deg, #6c5ce7, #a29bfe); 
   color: white;
   border-radius: 12px;
   font-weight: 700;
@@ -430,17 +430,17 @@ button:focus, input:focus {
   outline-offset: 2px;
 }
 
-/* Chat butonu */
+
 
 button[aria-label="Chatbot aç/kapa"] {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  background: radial-gradient(circle at center, #00ffff, #00cccc); /* Radyal gradyan */
+  background: radial-gradient(circle at center, #00ffff, #00cccc); 
   box-shadow: 0 0 15px #00ffff, 0 0 25px rgba(0, 255, 255, 0.6);
 }
 
 button[aria-label="Chatbot aç/kapa"]:hover {
   box-shadow: 0 0 25px #00ffff, 0 0 40px #00ffff, 0 0 60px rgba(0, 255, 255, 0.8);
-  transform: scale(1.05); /* Hafif büyüme */
+  transform: scale(1.05); 
 }
 button[aria-label="Chatbot aç/kapa"]:active {
   transform: scale(0.95);
@@ -450,7 +450,7 @@ button[aria-label="Chatbot aç/kapa"]:active {
 
 .video-controls {
   display: flex;
-  gap: 15px; /* Butonlar arası boşluk */
+  gap: 15px; 
   margin-top: 15px;
 }
 
@@ -499,17 +499,17 @@ button[aria-label="Chatbot aç/kapa"]:active {
   outline-offset: 3px;
 }
 
-/* Sonraki Dans Hareketi butonu */
+
 .next-dance-button {
   padding: 15px 30px;
   font-size: 18px;
   border-radius: 30px;
-  background: linear-gradient(45deg, #6a0572, #8e2de2); /* Mor gradyan */
+  background: linear-gradient(45deg, #6a0572, #8e2de2); 
   color: white;
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(106, 5, 114, 0.6), inset 0 -4px 8px rgba(70, 0, 75, 0.8);
   letter-spacing: 1px;
-  margin-top: 30px; /* Diğer elementlerden biraz daha boşluk */
+  margin-top: 30px; 
 }
 
 .next-dance-button:hover {
