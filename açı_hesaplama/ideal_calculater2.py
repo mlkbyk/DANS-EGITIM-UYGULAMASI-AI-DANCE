@@ -1,29 +1,26 @@
 import json
 import os
 import numpy as np
-import mediapipe as mp  # MediaPipe kütüphanesini içe aktar
+import mediapipe as mp  
 
-# MediaPipe poz çözümlerini başlat (mp_pose'u burada tanımlıyoruz)
+
 mp_pose = mp.solutions.pose
 
-# JSON dosyalarının bulunduğu dizin
-# ÖNEMLİ: Kendi referans veri dizininizin yolunu buraya yazın
+
 reference_data_directory = r"C:\Users\MS\dance-tracker\src\reference_data"
 
-# İdeal segmentlerin kaydedileceği çıktı dizini (aynı dizin olabilir)
-output_directory = r"C:\Users\MS\dance-tracker\src\reference_data"
-os.makedirs(output_directory, exist_ok=True)  # Dizin yoksa oluştur
 
-# İşlenecek JSON dosyalarının uzantısı
+output_directory = r"C:\Users\MS\dance-tracker\src\reference_data"
+os.makedirs(output_directory, exist_ok=True)  
+
+
 json_extension = '_pose_data.json'
 
-# İdeal segment penceresi boyutu (kare sayısı)
-# 20-30 kare arası, video FPS'ine göre ayarlanmalıdır.
-# Örneğin 30 FPS bir video için 30 kare = 1 saniye.
-WINDOW_SIZE = 25  # Varsayılan olarak 25 kare (yaklaşık 0.8 saniye @ 30 FPS)
 
-# Açı değişimini hesaplarken dikkate alınacak ana eklemler
-# Tüm eklemler yerine daha az ve kritik eklemleri kullanmak gürültüyü azaltabilir.
+WINDOW_SIZE = 25 
+
+
+
 IMPORTANT_ANGLES = [
     "left_elbow_angle", "right_elbow_angle",
     "left_shoulder_angle", "right_shoulder_angle",
@@ -32,9 +29,7 @@ IMPORTANT_ANGLES = [
     # "left_neck_angle", "right_neck_angle" # İsteğe bağlı, boyun hareketleri için
 ]
 
-# Önemli landmark ID'leri (MediaPipe PoseLandmark değerleri)
-# Bu ID'ler, IMPORTANT_ANGLES'ı oluşturan eklemlerin kendilerine karşılık gelir.
-# visibility değerlerini almak için kullanılır.
+
 IMPORTANT_LANDMARK_IDS = list(set([
     mp_pose.PoseLandmark.LEFT_SHOULDER.value, mp_pose.PoseLandmark.RIGHT_SHOULDER.value,
     mp_pose.PoseLandmark.LEFT_ELBOW.value, mp_pose.PoseLandmark.RIGHT_ELBOW.value,
@@ -46,29 +41,25 @@ IMPORTANT_LANDMARK_IDS = list(set([
     # Boyun için
 ]))
 
-# Düşük görünürlük için ceza faktörü.
-# Bu değer, açı değişiminin maksimum olası toplamına göre ayarlanmalıdır.
-# Örneğin, 10 önemli açı varsa ve her biri 180 derece değişebiliyorsa, max delta 1800'dür.
-# Görünürlük cezası da bu aralıkta anlamlı bir etki yaratmalıdır.
-# Burada, her 1 birim görünürlük eksikliği için 50 derece açı değişimi kadar ceza veriyoruz.
-VISIBILITY_PENALTY_FACTOR = len(IMPORTANT_ANGLES) * 50  # Önemli açı sayısı * 50 (ayarlanabilir)
+
+VISIBILITY_PENALTY_FACTOR = len(IMPORTANT_ANGLES) * 50  
 
 print(f"Referans veri dizini: {reference_data_directory}")
 print(f"Çıktı dizini: {output_directory}")
 print(f"Pencere boyutu (kare): {WINDOW_SIZE}")
 print(f"Görünürlük ceza faktörü: {VISIBILITY_PENALTY_FACTOR}")
 
-# Dizindeki tüm JSON dosyalarını tara
+
 for filename in os.listdir(reference_data_directory):
     if filename.endswith(json_extension):
         json_path = os.path.join(reference_data_directory, filename)
-        video_name = filename.replace(json_extension, '')  # Video adını al
+        video_name = filename.replace(json_extension, '')  
 
         print(f"\n--- '{filename}' dosyası işleniyor... ---")
 
         try:
             with open(json_path, 'r') as f:
-                frame_data = json.load(f)  # Tüm kare verilerini yükle
+                frame_data = json.load(f)  
         except json.JSONDecodeError as e:
             print(f"Hata: '{filename}' dosyası okunurken JSON hatası oluştu: {e}")
             continue
@@ -84,9 +75,7 @@ for filename in os.listdir(reference_data_directory):
                 f"Uyarı: '{filename}' dosyasındaki kare sayısı ({len(frame_data)}) pencere boyutundan ({WINDOW_SIZE}) küçük. Atlanıyor.")
             continue
 
-        # Her kare için kalite skorunu hesapla
-        # Kalite skoru = (açı değişiminin toplamı) + (düşük görünürlük cezası)
-        # Daha düşük skor = daha yüksek kalite / daha ideal segment
+        
         frame_quality_scores = []
         for i in range(len(frame_data) - 1):
             current_frame = frame_data[i]
@@ -96,14 +85,14 @@ for filename in os.listdir(reference_data_directory):
             next_frame_angles = next_frame['angles']
             current_frame_landmarks = current_frame['landmarks']
 
-            # Açı değişimini hesapla
+            
             frame_delta_sum = 0
             for angle_name in IMPORTANT_ANGLES:
                 if angle_name in current_frame_angles and angle_name in next_frame_angles:
                     delta = abs(current_frame_angles[angle_name] - next_frame_angles[angle_name])
                     frame_delta_sum += delta
 
-            # Önemli landmark'ların ortalama görünürlüğünü hesapla
+            
             total_visibility = 0
             visible_landmark_count = 0
             for lm_data in current_frame_landmarks:
@@ -113,9 +102,7 @@ for filename in os.listdir(reference_data_directory):
 
             avg_visibility = total_visibility / visible_landmark_count if visible_landmark_count > 0 else 0
 
-            # Düşük görünürlük için ceza hesapla
-            # (1 - avg_visibility) değeri 0 (tam görünür) ile 1 (hiç görünmez) arasında değişir.
-            # Bu değeri PENALTY_FACTOR ile çarparak açı değişimine ekliyoruz.
+           
             visibility_penalty = (1 - avg_visibility) * VISIBILITY_PENALTY_FACTOR
 
             # Kare kalitesi skoru: Açı değişimi + Görünürlük cezası
@@ -139,8 +126,7 @@ for filename in os.listdir(reference_data_directory):
             continue
 
         # İdeal segmenti çıkar
-        # best_start_frame_index, frame_quality_scores listesindeki başlangıç indeksidir,
-        # bu da aslında frame_data'daki başlangıç karesine karşılık gelir.
+        
         ideal_segment_frames = frame_data[best_start_frame_index: best_start_frame_index + WINDOW_SIZE]
 
         # Çıktı JSON dosyasının adı
