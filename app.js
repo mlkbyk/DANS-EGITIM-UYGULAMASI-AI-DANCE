@@ -70,7 +70,7 @@ export default function App() {
   const lastFeedbackTime = useRef(0);
   const animationFrameId = useRef(null);
 
-  // YORUM: Uygulama başlangıcında sohbet mesajlarını ayarla ve referans verilerini yükle
+  
   useEffect(() => {
     setChatMessages((prev) => [...prev, {
       sender: 'bot',
@@ -79,7 +79,7 @@ export default function App() {
     loadReferenceData();
   }, []);
 
-  // YORUM: Referans dans verilerini JSON dosyalarından yükle
+  
   const loadReferenceData = async () => {
     setIsLoadingReferenceData(true);
     const dataToLoad = {};
@@ -330,7 +330,7 @@ export default function App() {
       setGeminiLoading(true);
       lastFeedbackTime.current = now;
 
-      // YORUM: Yeni Flask backend endpoint'ine istek gönder
+      
       const apiUrl = 'http://localhost:5000/evaluate_pose';
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -363,7 +363,7 @@ export default function App() {
 
 
   useEffect(() => {
-    if (!started) return; // YORUM: Dans başlatılmadıysa döngüyü çalıştırma
+    if (!started) return; 
 
     const mainEvaluationLoop = () => {
       const currentRefVideo = refVideoRef.current;
